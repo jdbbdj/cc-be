@@ -1,12 +1,13 @@
 import { IBase } from "../base.validator";
 
-interface CartsValidator extends IBase {
-  image: String;
-  images: Array<String>;
-  name: String;
-  price: Number;
-  sizes: Array<Number>;
-  description: String;
+interface Product {
+  productId: string;
+  quantity: number;
+}
+
+interface CartsValidator {
+  userId: string;
+  products: Product[];
 }
 
 export type { CartsValidator };

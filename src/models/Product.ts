@@ -1,17 +1,17 @@
 import { model, Schema } from "mongoose";
 import { ProductValidator } from "../validator/products/products.validator";
-
-const ProductSchema = new Schema<ProductValidator>({
-  image: { type: String, required: true },
-  images: [{ type: String, required: true }],
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  sizes: [{ type: Number, required: true }],
-  description: { type: String },
-  dateCreated: { type: Date, required: true, default: Date.now },
-  createdBy: { type: Number, required: true, default: 1 },
-  dateUpdated: { type: Date, required: true, default: Date.now },
-  updatedBy: { type: Number, required: true, default: 1 },
-});
+import { timestamps } from "./timestamps";
+const ProductSchema = new Schema<ProductValidator>(
+  {
+    title: { type: String, required: true, unique: true },
+    desc: { type: String, required: true },
+    img: { type: String, required: true },
+    categories: { type: [String], required: true },
+    size: { type: [String], required: true },
+    color: { type: [String], required: true },
+    price: { type: Number, required: true },
+  },
+  timestamps
+);
 
 export const Product = model("products", ProductSchema);
