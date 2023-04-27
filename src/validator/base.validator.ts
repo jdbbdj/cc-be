@@ -1,8 +1,5 @@
 interface IBase {
-  dateCreated: Date;
-  createdBy: number;
-  dateUpdated: Date;
-  updatedBy: number;
+  timestamps: true;
 }
 
 export type { IBase };

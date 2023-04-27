@@ -1,17 +1,23 @@
 import { model, Schema } from "mongoose";
 import { CartsValidator } from "../validator/carts/carts.validator";
+import { timestamps } from "./timestamps";
 
-const CartSchema = new Schema<CartsValidator>({
-  image: { type: String, required: true },
-  images: [{ type: String, required: true }],
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  sizes: [{ type: Number, required: true }],
-  description: { type: String },
-  dateCreated: { type: Date, required: true, default: Date.now },
-  createdBy: { type: Number, required: true, default: 1 },
-  dateUpdated: { type: Date, required: true, default: Date.now },
-  updatedBy: { type: Number, required: true, default: 1 },
-});
+const CartSchema = new Schema<CartsValidator>(
+  {
+    userId: { type: String, required: true },
+    products: [
+      {
+        productId: {
+          type: String,
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
+      },
+    ],
+  },
+  timestamps
+);
 
 export const Cart = model("orders", CartSchema);

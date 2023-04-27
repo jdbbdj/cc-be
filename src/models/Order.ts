@@ -1,17 +1,25 @@
 import { model, Schema } from "mongoose";
 import { OrderValidator } from "../validator/orders/orders.validator";
-
-const OrderSchema = new Schema<OrderValidator>({
-  image: { type: String, required: true },
-  images: [{ type: String, required: true }],
-  name: { type: String, required: true },
-  price: { type: Number, required: true },
-  sizes: [{ type: Number, required: true }],
-  description: { type: String },
-  dateCreated: { type: Date, required: true, default: Date.now },
-  createdBy: { type: Number, required: true, default: 1 },
-  dateUpdated: { type: Date, required: true, default: Date.now },
-  updatedBy: { type: Number, required: true, default: 1 },
-});
+import { timestamps } from "./timestamps";
+const OrderSchema = new Schema<OrderValidator>(
+  {
+    userId: { type: String, required: true },
+    products: [
+      {
+        productId: {
+          type: String,
+        },
+        quantity: {
+          type: Number,
+          default: 1,
+        },
+      },
+    ],
+    amount: { type: Number, required: true },
+    address: { type: Object, required: true },
+    status: { type: String, default: "pending" },
+  },
+  timestamps
+);
 
 export const Order = model("orders", OrderSchema);
