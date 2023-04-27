@@ -1,6 +1,6 @@
 import { IBase } from "../base.validator";
 
-interface ProductValidator extends IBase {
+interface UserValidator extends IBase {
   image: String;
   images: Array<String>;
   name: String;
@@ -9,4 +9,4 @@ interface ProductValidator extends IBase {
   description: String;
 }
 
-export type { ProductValidator };
+export type { UserValidator };

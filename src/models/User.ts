@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
-import { OrderValidator } from "../validator/orders/orders.validator";
+import { UserValidator } from "../validator/users/users.validator";
 
-const OrderSchema = new Schema<OrderValidator>({
+const UserSchema = new Schema<UserValidator>({
   image: { type: String, required: true },
   images: [{ type: String, required: true }],
   name: { type: String, required: true },
@@ -14,4 +14,4 @@ const OrderSchema = new Schema<OrderValidator>({
   updatedBy: { type: Number, required: true, default: 1 },
 });
 
-export const Order = model("orders", OrderSchema);
+export const User = model("user", UserSchema);
