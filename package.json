@@ -1,7 +1,7 @@
 {
   "name": "eevee",
   "version": "1.0.0",
-  "description": "Hi! I'm your first Markdown file in **DSA Repo**. If you want to learn about Data Structure and Algorithm and learn more about Leet Coding\r solutions this would be a great start.",
+  "description": "This is a repository for my sample e-commerce using typescript",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jdbbdj/eevee.git"
+    "url": "git+https://github.com/jdbbdj/cc-be.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/jdbbdj/eevee/issues"
+    "url": "https://github.com/jdbbdj/cc-be/issues"
   },
-  "homepage": "https://github.com/jdbbdj/eevee#readme",
+  "homepage": "https://github.com/jdbbdj/cc-be#readme",
   "devDependencies": {
     "@types/express": "^4.17.17",
     "@types/mongoose": "^5.11.97",

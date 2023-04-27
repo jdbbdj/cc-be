@@ -1,6 +1,7 @@
 import { model, Schema } from "mongoose";
-import { IProducts } from "../validator/products/products.validator";
-const ProductSchema = new Schema<IProducts>({
+import { ProductValidator } from "../validator/products/products.validator";
+
+const ProductSchema = new Schema<ProductValidator>({
   image: { type: String, required: true },
   images: [{ type: String, required: true }],
   name: { type: String, required: true },

@@ -1,11 +1,12 @@
 {
   "compilerOptions": {
+    "target": "esnext",
+    "lib": ["dom", "esnext"],
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES3",
-    "sourceMap": true,
-    "outDir": "dist",
-    "ignoreDeprecations": "5.0"
+    "moduleResolution": "NodeNext"
   },
-  "include": ["src/**/*"]
+  "include": ["./src/**/*"]
 }
