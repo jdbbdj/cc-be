@@ -1,6 +1,24 @@
 import { Request, Response } from "express";
 import { Order } from "../models/Order";
 
+export const createOrder = async (req: Request, res: Response) => {
+  const newOrder = new Order({
+    userId: req.body.userId,
+    products: req.body.products,
+    amount: req.body.amount,
+    address: req.body.address,
+    status: "pending",
+  });
+
+  //save this to mongodb
+  try {
+    const savedOrder = await newOrder.save();
+    res.status(201).send({ data: savedOrder });
+  } catch (e) {
+    res.status(500).json(e);
+  }
+};
+
 export const getProducts = async (req: Request, res: Response) => {
   try {
     let products;

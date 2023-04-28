@@ -4,6 +4,7 @@ import productRouter from "./routes/products/";
 import orderRouter from "./routes/orders/";
 import cartRouter from "./routes/carts";
 import userRouter from "./routes/users";
+import authRouter from "./routes/users/auth";
 import Connect from "./database/connect";
 
 /************DOTENV************/
@@ -15,6 +16,7 @@ const app: Application = express();
 app.use(express.json());
 
 /************ROUTES************/
+app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/carts", cartRouter);
 app.use("/products", productRouter);

@@ -4,8 +4,11 @@ import {
   getProductsByID,
   getProductsBySize,
   getProductsByIDandSize,
+  createProduct,
 } from "../../controllers/ProductsController";
 const router: Router = express.Router();
+
+router.post("/create", createProduct);
 
 router.get("/", getProducts);
 
