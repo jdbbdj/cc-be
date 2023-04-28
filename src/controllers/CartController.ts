@@ -1,6 +1,21 @@
 import { Request, Response } from "express";
 import { Cart } from "../models/Cart";
 
+export const createCart = async (req: Request, res: Response) => {
+  const newCart = new Cart({
+    userId: req.body.userId,
+    products: req.body.products,
+  });
+
+  //save this to mongodb
+  try {
+    const savedCart = await newCart.save();
+    res.status(201).send({ data: savedCart });
+  } catch (e) {
+    res.status(500).json(e);
+  }
+};
+
 export const getProducts = async (req: Request, res: Response) => {
   try {
     let products;
