@@ -1,17 +1,50 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
-
+import CryptoJS from "crypto-js";
 export const registerUser = async (req: Request, res: Response) => {
   const newUser = new User({
     username: req.body.username,
     email: req.body.email,
-    password: req.body.password,
+    password: CryptoJS.AES.encrypt(
+      req.body.password,
+      process.env.PASSWORD_KEY
+    ).toString(),
   });
 
   //save this to mongodb
   try {
     const savedUser = await newUser.save();
-    res.status(201).send(`Successfully created user ${req.body.username}`);
+    res.status(201).send({ data: savedUser });
+  } catch (e) {
+    res.status(500).json(e);
+  }
+};
+
+export const loginUser = async (req: Request, res: Response) => {
+  try {
+    //get userdata through findOne
+    const savedUser = await User.findOne({ username: req.body.username });
+    if (!savedUser) {
+      return res.status(401).json({ message: "No Username Found" });
+    }
+    //decrypt the data password
+    const passwordHolder = CryptoJS.AES.decrypt(
+      savedUser.password,
+      process.env.PASSWORD_KEY
+    );
+    //utf encryption or else it will return error
+    const strpasswordHolder = passwordHolder.toString(CryptoJS.enc.Utf8);
+
+    if (strpasswordHolder !== req.body.password) {
+      return res.status(401).json({ message: "Wrong Password" });
+    }
+
+    //seperate password using dot seperator
+    const { password, ...others } = savedUser["_doc"];
+    return res.status(200).json({
+      message: "Login Successful",
+      data: others,
+    });
   } catch (e) {
     res.status(500).json(e);
   }
