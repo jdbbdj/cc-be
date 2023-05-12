@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
 import CryptoJS from "crypto-js";
+import jwt from "jsonwebtoken";
+
 export const registerUser = async (req: Request, res: Response) => {
   const newUser = new User({
     username: req.body.username,
@@ -39,11 +41,22 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Wrong Password" });
     }
 
+    //create a jwt encrypted token
+    const accessToken = jwt.sign(
+      { id: savedUser.id, isAdmin: savedUser.isAdmin },
+      //jwt access key
+      process.env.JWT_KEY,
+      //expiration date
+      { expiresIn: "3d" }
+    );
+
     //seperate password using dot seperator
-    const { password, ...others } = savedUser["_doc"];
+    const { password, ...details } = savedUser["_doc"];
     return res.status(200).json({
       message: "Login Successful",
-      data: others,
+      //insert accesstoken on return details should be dot seperated to include in one return with accesstoken
+      //or just use details to seperate it with access token
+      data: { ...details, accessToken },
     });
   } catch (e) {
     res.status(500).json(e);

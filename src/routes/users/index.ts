@@ -1,18 +1,8 @@
 import express, { Router } from "express";
-import {
-  getProducts,
-  getProductsByID,
-  getProductsBySize,
-  getProductsByIDandSize,
-} from "../../controllers/ProductsController";
+import { getProductsByID } from "../../controllers/ProductsController";
+import { updateUsername } from "../../controllers/VerifyToken";
 const router: Router = express.Router();
 
-router.get("/", getProducts);
-
-router.get("/:id", getProductsByID);
-
-router.get("/shoe/", getProductsBySize);
-
-router.get("/shoe/:id", getProductsByIDandSize);
+router.put("/:id", updateUsername);
 
 export default router;
