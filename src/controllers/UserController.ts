@@ -68,6 +68,24 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
+//find all user
+export const findAllUser = (req: CustomRequest, res: Response) => {
+  const query = req.query.new;
+  //reuse the above function for checking the user id and return its details
+  verifyTokenAdmin(req, res, async () => {
+    try {
+      const allUsers = query
+        ? await User.find().sort({ id: -1 }).limit(5)
+        : await User.find();
+      return res
+        .status(200)
+        .json({ message: "Retrieved successfuly", data: allUsers });
+    } catch (err) {
+      return res.status(500).json({ message: err });
+    }
+  });
+};
+
 //delete user
 export const deleteUser = (req: CustomRequest, res: Response) => {
   //reuse the above function for checking the user id and return its details
