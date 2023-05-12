@@ -32,34 +32,19 @@ export const verifyToken = (
   }
 };
 
-//update password
-export const updateUsername = (
+//this is for verify for admin
+export const verifyTokenAdmin = (
   req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
-  //reuse the above function for checking the user id and return its details
-  verifyToken(req, res, async () => {
-    if (req.user.id === req.params.id || req.user.isAdmin) {
-      req.body.password = CryptoJS.AES.encrypt(
-        req.body.password,
-        process.env.PASSWORD_KEY
-      ).toString();
-
-      try {
-        const updatedUser = await User.findByIdAndUpdate(
-          //check the id
-          req.params.id,
-          //update all contents
-          { $set: req.body },
-          { new: true }
-        );
-        return res
-          .status(200)
-          .json({ message: "User updated successfuly", data: updatedUser });
-      } catch (err) {
-        return res.status(500).json({ message: err });
-      }
+  verifyToken(req, res, () => {
+    if (req.user.isAdmin) {
+      next();
+    } else {
+      return res
+        .status(500)
+        .json({ message: "You aren't allowed for admin rights" });
     }
   });
 };

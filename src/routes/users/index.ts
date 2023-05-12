@@ -1,8 +1,10 @@
 import express, { Router } from "express";
-import { getProductsByID } from "../../controllers/ProductsController";
-import { updateUsername } from "../../controllers/VerifyToken";
+import { updateUser, deleteUser } from "../../controllers/UserController";
+
 const router: Router = express.Router();
 
-router.put("/:id", updateUsername);
+router.put("/:id", updateUser);
+
+router.put("/delete/:id", deleteUser);
 
 export default router;
