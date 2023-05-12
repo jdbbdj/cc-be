@@ -1,7 +1,12 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { User } from "../models/User";
+import { verifyToken, verifyTokenAdmin } from "./VerifyToken";
 import CryptoJS from "crypto-js";
 import jwt from "jsonwebtoken";
+
+interface CustomRequest extends Request {
+  user?: any; // Replace 'any' with the appropriate type for the user object
+}
 
 export const registerUser = async (req: Request, res: Response) => {
   const newUser = new User({
@@ -63,46 +68,52 @@ export const loginUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getProducts = async (req: Request, res: Response) => {
-  try {
-    let products;
-    products = await User.find();
-    res.status(200).send({ data: products });
-  } catch (err) {
-    res.status(500).json(err);
-  }
+//delete user
+export const deleteUser = (req: CustomRequest, res: Response) => {
+  //reuse the above function for checking the user id and return its details
+  verifyTokenAdmin(req, res, async () => {
+    try {
+      const deletedUser = await User.findByIdAndDelete(
+        //check the id
+        req.body.id
+      );
+      return res
+        .status(200)
+        .json({ message: "User deleted successfuly", data: deletedUser });
+    } catch (err) {
+      return res.status(500).json({ message: err });
+    }
+  });
 };
 
-export const getProductsByID = async (req: Request, res: Response) => {
-  try {
-    let product;
-    product = await User.findById(req.params.id);
-    res.status(200).send({ data: product });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-};
+//update user
+export const updateUser = (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  //reuse the above function for checking the user id and return its details
+  verifyToken(req, res, async () => {
+    if (req.user.id === req.params.id || req.user.isAdmin) {
+      req.body.password = CryptoJS.AES.encrypt(
+        req.body.password,
+        process.env.PASSWORD_KEY
+      ).toString();
 
-export const getProductsBySize = (req: Request, res: Response) => {
-  console.log("HERE");
-  res.send(
-    "ID and Name of the client::" +
-      "id" +
-      req.query.id +
-      "name: " +
-      req.query.name
-  );
-};
-
-export const getProductsByIDandSize = (req: Request, res: Response) => {
-  console.log("HERE2");
-  res.send(
-    "ID and Name of the client::" +
-      "id" +
-      req.query.id +
-      "name: " +
-      req.query.name +
-      "params:" +
-      req.params.id
-  );
+      try {
+        const updatedUser = await User.findByIdAndUpdate(
+          //check the id
+          req.params.id,
+          //update all contents
+          { $set: req.body },
+          { new: true }
+        );
+        return res
+          .status(200)
+          .json({ message: "User updated successfuly", data: updatedUser });
+      } catch (err) {
+        return res.status(500).json({ message: err });
+      }
+    }
+  });
 };
